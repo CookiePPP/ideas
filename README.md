@@ -59,3 +59,23 @@ DDPM's show exceptional performance when modelling spectrograms [related](https:
 [ISTFTNET](https://arxiv.org/pdf/2203.02395.pdf) shows that predicting the spectrogram+phase directly can improve performance significantly for downstream TTS, so I propose running WaveGrad on the (log)spectrogram directly, which will allow the model to output silence without special inference schedules and precise learning rates.
 
 There is the issue of phase being a circular uniform distribution, so predicting 359° when the GT sample is 0°, would give incorrect error, however this is just an implementation detail and shouldn't be too hard to solve.
+
+---
+
+## 🟩 MOS-TTS
+
+Following my experience with [rating images](https://github.com/CookiePPP/derpy-score-predictor) by assigning percentiles, then training Stable-Diffusion with score-percentile-given-content conditioning to bias the model towards high quality outputs, I propose MOS-TTS.
+
+[VoiceMOS Challenge 2022](https://arxiv.org/pdf/2203.11389.pdf) showed that SOTA MOS prediction models are reaching MSE's around 0.1. With that much accuracy I believe you could train a TTS model with predicted MOS per sample or segment as conditioning, and use that conditioning to improve the output quality.
+
+Something like
+```python
+mos_cond = 5.0
+mos_uncond = 1.0
+CFG_scale = 8.0
+pr_eps = DDPM(text, mos_cond)
+pr_eps_uncond = DDPM(text, mos_uncond)
+pr_eps = pr_eps_uncond + CFG_scale*(pr_eps-pr_eps_uncond)
+```
+
+seems like decent default parameters for this theoretical inference code.
