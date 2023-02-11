@@ -18,6 +18,8 @@ For an emotive TTS downstream task, I imagine the understanding of the text is f
 
 So I propose some changes that may or may not improve the model.
 
+---
+
 1. Use both word-level and character-level embeddings.
 
 The paper already finds a significant benefit from adding word-level position encoding. I imagine adding word-level value embeddings is just as important for understanding the text.
@@ -26,11 +28,15 @@ The paper already finds a significant benefit from adding word-level position en
 
 Also [Mixed-Phoneme BERT](https://arxiv.org/pdf/2203.17190.pdf) who found a large benefit from using phoneme AND subphoneme value embeddings. (Note - MPBERT doesn't use subphone-level position encoding. another thing to test.)
 
+---
+
 2. Additional teachers.
 
 PnG BERT doesn't use ground truth phoneme data, it actually uses a pretrained text -> phoneme model. Because of this, the model is effectively just a student of a G2P model that also has to learn MLM objective.
 
 The paper shows that despite not being ground truth data, it still improves downstream performance, so I propose adding an emotion classification objective using the latents of pretrained model [DeepMoji](https://github.com/bfelbo/DeepMoji) as ground truth 'emotion' for each sample, and training PnG BERT to also predict this latent.
+
+---
 
 3. More varied dataset
 
