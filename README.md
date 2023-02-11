@@ -41,3 +41,11 @@ The paper shows that despite not being ground truth data, it still improves down
 3. More varied dataset
 
 PNG BERT uses Wikipedia as their pretraining dataset which makes perfect sense given their model needs to see a large variety of vocab in order to learn from it's G2P teacher. I propose using the [twemoji](https://uvaauas.figshare.com/articles/dataset/Twemoji_Dataset/5822100) dataset as additional training data since it contains a variety of emotion which will help PnG BERT learn from the proposed DeepMoji teacher.
+
+---
+
+## 🟧 Speaker Embed Enhancer
+
+Following [Latent space crawling](https://github.com/DanRuta/xVA-Synth/commit/5325d7e1a4ffc9ecc9df55ee0c848a2b28ed6f77) to control pitch in TTS models without explicit pitch conditioning. I propose training a model that converts noisy speaker embeddings into clean ones.
+
+The training process would be extremely simple. Take a bunch of clean audio files, calculate speaker embeddings from the original file and the same file with added noise and sound effects, then train a DDPM to predict the clean embedding from the noisy one. Classifier-Free Guidance or multiple passes can be used during inference to clean the embeddings beyond GT level (albeit, with unknown side effects).
