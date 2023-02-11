@@ -49,3 +49,13 @@ PNG BERT uses Wikipedia as their pretraining dataset which makes perfect sense g
 Following [Latent space crawling](https://github.com/DanRuta/xVA-Synth/commit/5325d7e1a4ffc9ecc9df55ee0c848a2b28ed6f77) to control pitch in TTS models without explicit pitch conditioning. I propose training a model that converts noisy speaker embeddings into clean ones.
 
 The training process would be extremely simple. Take a bunch of clean audio files, calculate speaker embeddings from the original file and the same file with added noise and sound effects, then train a DDPM to predict the clean embedding from the noisy one. Classifier-Free Guidance or multiple passes can be used during inference to clean the embeddings beyond GT level (albeit, with unknown side effects).
+
+---
+
+## 🟨 iSTFT-WaveGrad
+
+DDPM's show exceptional performance when modelling spectrograms [related](https://github.com/CookiePPP/papers/blob/main/README.md#grad-tts-a-diffusion-probabilistic-model-for-text-to-speech-and-diff-tts-a-denoising-diffusion-model-for-text-to-speech), however when applied to waveforms they tend to add white noise to the background of samples, and require special non-linear sampling schedules for performant inference.
+
+[ISTFTNET](https://arxiv.org/pdf/2203.02395.pdf) shows that predicting the spectrogram+phase directly can improve performance significantly for downstream TTS, so I propose running WaveGrad on the (log)spectrogram directly, which will allow the model to output silence without special inference schedules and precise learning rates.
+
+There is the issue of phase being a circular uniform distribution, so predicting 359° when the GT sample is 0°, would give incorrect error, however this is just an implementation detail and shouldn't be too hard to solve.
