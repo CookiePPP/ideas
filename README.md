@@ -6,7 +6,7 @@
 
 ---
 
-## 🟥 PnG BERT++
+## 🟥 PnGnW BERT (Phoneme and Grapheme and Word BERT)
 
 ![image](https://user-images.githubusercontent.com/42448678/218235075-a1731746-bcb5-4d1f-83ce-a18ebe144539.png)
 
